@@ -1,0 +1,118 @@
+﻿<Window x:Class="PEt.CatalogWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:converters="clr-namespace:PEt.Classes"
+        mc:Ignorable="d"
+    Title="CatalogWindow" Height="500" Width="800" Loaded="Window_Loaded">
+    <Window.Resources>
+        <converters:DiscountToPriceConverter x:Key="discountToPriceConverter" />
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+
+        <ListView x:Name="listServices" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Margin="0 10 114 0"
+                  d:ItemsSource="{d:SampleData ItemCount=5}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Изображение" Width="130">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Width="120" Height="120">
+                                    <Image.Source>
+                                        <Binding Path="ServiceImage">
+                                            <Binding.TargetNullValue>
+                                                <ImageSource>pack://application:,,,/PEt;component/Resources/logo_4.png</ImageSource>
+                                            </Binding.TargetNullValue>
+                                        </Binding>
+                                    </Image.Source>
+                                </Image>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Описание" Width="254">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Text="{Binding ServiceName, StringFormat={}Название: {0}}" Grid.Row="0" Style="{StaticResource BigBlockText}"/>
+                                    <TextBlock Text="{Binding ServicePrice, StringFormat={}Цена: {0} руб.}" Grid.Row="1" Style="{StaticResource BigBlockText}"/>
+                                    <TextBlock Text="{Binding ServiceDiscount, StringFormat={}Скидка: {0} %}" Grid.Row="2" Style="{StaticResource BigBlockText}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn  Width="160">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <StackPanel>
+                                        <Button x:Name="btnAddToOrder" Content="Добавить в корзину" Click="Button_Click"/>
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+
+        <ComboBox x:Name="cbCategory" Width="120" Height="30"
+                  HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                 Grid.Column="1" Grid.Row="0" SelectionChanged="cbCategory_SelectionChanged"/>
+
+        <ComboBox x:Name="cbPrice" Width="120" Height="30"
+                  HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                 Grid.Column="1" Grid.Row="0" SelectionChanged="cbPrice_SelectionChanged"/>
+
+        <ComboBox x:Name="cbDiscount" Width="120" Height="30"
+                  HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                 Grid.Column="1" Grid.Row="0" SelectionChanged="cbDiscount_SelectionChanged"/>
+
+        <TextBox x:Name="tbSearch" Width="120" Height="30" 
+                 HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                 Grid.Column="2" Grid.Row="0" TextChanged="tbSearch_TextChanged"/>
+
+
+        <TextBlock Text="Категории" Width="auto" Height="auto" Margin="30 0 0 0" Style="{StaticResource BlockText}"
+                   HorizontalAlignment="Left" VerticalAlignment="Center"
+                 Grid.Column="1" Grid.Row="0" />
+        <TextBlock Text="Сортировка по цене" Width="auto" Height="auto" Style="{StaticResource BlockText}"
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                 Grid.Column="1" Grid.Row="0"/>
+        <TextBlock Text="Сортировка по скидке" Width="auto" Height="auto" Style="{StaticResource BlockText}"
+                   HorizontalAlignment="Right" VerticalAlignment="Center"
+                 Grid.Column="1" Grid.Row="0"/>
+
+        <TextBlock Text="Поиск" Width="auto" Height="auto" Style="{StaticResource BlockText}"
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                   Grid.Column="2" Grid.Row="0"/>
+
+        <TextBlock x:Name="tbCount" Text="" Width="auto" Height="auto" Style="{StaticResource BlockText}" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" Margin="10 0 0 10" TextAlignment="Center" Grid.ColumnSpan="2"/>
+        <Button x:Name="btnAddService" Content="Добавить услугу" HorizontalAlignment="Left" Width="auto" Height="auto" Margin="88,18,0,0" Grid.Row="2" VerticalAlignment="Top" Click="btnAddService_Click" Grid.Column="1"/>
+        <Button x:Name="btnDeleteService" Content="Удалить выбранную услугу" Width="auto" Height="auto" Grid.Column="1" Margin="234,31,60,34" Grid.Row="2" Click="btnDeleteService_Click"/>
+        <Button x:Name="btnCreateOrder" Content="Оформление заказа" Width="auto" Height="auto" Grid.Column="2" Margin="37,33,37,32" Grid.Row="2" Click="btnCreateOrder_Click"/>
+        <Button x:Name="btnEditService" Content="Редактировать услугу" Width="auto" Height="auto" HorizontalAlignment="Left" Margin="75,53,0,0" Grid.Row="2" VerticalAlignment="Top" Click="btnEditService_Click" Grid.Column="1"/>
+    </Grid>
+
+</Window>
